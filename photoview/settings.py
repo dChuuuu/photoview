@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
-#from photoview import env
+from dotenv import dotenv_values
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,12 +21,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-c3ujo!%$90t5giy=uwsixf8q5j#hsitg@b2j=u6#h%2zd5md*6'
+SECRET_KEY = dotenv_values().get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1']
 
 
 # Application definition
@@ -76,15 +76,15 @@ WSGI_APPLICATION = 'photoview.wsgi.application'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'photoview_db',
-        'USER': 'postgres',
-        'PASSWORD': '8565',
-        'HOST': '127.0.0.1',
-        'PORT': '5432'
-    }
-}
+     'default': {
+         'ENGINE': dotenv_values().get('ENGINE'),
+         'NAME': dotenv_values().get('NAME'),
+         'USER': dotenv_values().get('USER'),
+         'PASSWORD': dotenv_values().get('PASSWORD'),
+         'HOST': dotenv_values().get('HOST'),
+         'PORT': dotenv_values().get('PORT')
+     }
+ }
 
 
 # Password validation
@@ -129,4 +129,3 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-print(BASE_DIR)
