@@ -22,6 +22,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/v1/posts', PostsViewSet.as_view({'get': 'list'})),
     path('api/v1/posts/create', PostsViewSet.as_view({'post': 'create'})),
-    path('api/v1/posts/edit/<int:pk>', PostsViewSet.as_view({'put': 'retrieve'})),
+    path('api/v1/posts/edit/<int:pk>', PostsViewSet.as_view({'put': 'update'})),
     path('api/v1/posts/delete/<int:pk>', PostsViewSet.as_view({'delete': 'destroy'}))
 ]
