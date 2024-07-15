@@ -3,6 +3,7 @@ from .models import Posts, Comments
 
 '''Сериализаторы для моделей. Позволяют де- и сериализовать данные в JSON формат'''
 
+
 class PostsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Posts
