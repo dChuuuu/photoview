@@ -20,6 +20,8 @@ from rest_framework.routers import SimpleRouter
 
 from api.views import PostsAPIView, PostAPIView, CommentsViewSet
 
+'''TODO ДОБАВИТЬ ЛОКАЛЬНЫЕ УРЛЫ ДЛЯ API И ИНТЕГРИРОВАТЬ ЧЕРЕЗ include()'''
+
 # router = SimpleRouter()
 # router.register('posts', PostsViewSet)
 # router.register('comments', CommentsViewSet)
