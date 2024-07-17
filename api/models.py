@@ -1,7 +1,18 @@
 from django.db import models
+from django.http import Http404
 
 '''Модели для связи с БД'''
 
+class PostsManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset()
+
+    def get_object_or_404(self, pk):
+        try:
+            instance = Posts.objects.get(post_id=pk)
+        except:
+            raise Http404
+        return instance
 
 class Posts(models.Model):
     '''Класс описывает модель постов:
@@ -14,12 +25,14 @@ class Posts(models.Model):
     date_time_edited - Дата редактирования поста TODO РЕАЛИЗОВАТЬ ТАЙМЕР СУТКИ НА РЕДАКТИРОВАНИЕ ПОСТА'''
 
     post_id = models.BigAutoField(primary_key=True, unique=True)
-    title = models.CharField(max_length=256)
-    content = models.TextField(max_length=1024, default=None)
-    picture = models.TextField(default=None)
+    title = models.CharField(max_length=256, null=True)
+    content = models.TextField(max_length=1024, default=None, null=True)
+    picture = models.TextField(default=None, null=True)
     likes = models.BigIntegerField(default=0)
     date_time_created = models.DateField(auto_now_add=True)
     date_time_edited = models.DateField(auto_now_add=True)
+
+    objects = PostsManager()
 
 
 class Comments(models.Model):
