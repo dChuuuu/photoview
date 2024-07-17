@@ -10,6 +10,7 @@ from .models import Posts, Comments
 
 
 class PostsAPIView(APIView):
+    '''Полный набор CRUD-операций над постами'''
     def get(self, request):
         data = Posts.objects.all()
         serializer = PostsSerializer(data=data, many=True)

@@ -4,6 +4,8 @@ from django.http import Http404
 '''Модели для связи с БД'''
 
 class PostsManager(models.Manager):
+    '''Менеджер добавляет функционал по работе с постами
+    get_object_or_404 - возвращает объект, либо статус 404'''
     def get_queryset(self):
         return super().get_queryset()
 
