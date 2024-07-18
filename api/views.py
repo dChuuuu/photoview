@@ -1,6 +1,7 @@
 from django.http import Http404
 from django.shortcuts import render
 from rest_framework import viewsets, status
+from rest_framework.pagination import LimitOffsetPagination, PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -11,16 +12,19 @@ from .models import Posts, Comments
 
 class PostsAPIView(APIView):
     '''Полный набор CRUD-операций над постами'''
+
     def get(self, request):
+        paginator = PageNumberPagination()
         data = Posts.objects.all()
-        serializer = PostsSerializer(data=data, many=True)
+        result_page = paginator.paginate_queryset(queryset=data, request=request)
+        serializer = PostsSerializer(data=result_page, many=True)
         serializer.is_valid()
         return Response({"posts": serializer.data}, status=status.HTTP_200_OK)
 
     def post(self, request):
         data = request.data
         serializer = PostsSerializer(data=data)
-        if serializer.is_valid():
+        if serializer.is_valid() and 'title' in data:
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
