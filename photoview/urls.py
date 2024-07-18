@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework.routers import SimpleRouter
 
-from api.views import PostsAPIView, PostAPIView, CommentsViewSet
+from api.views import PostsAPIView, PostAPIView, CommentsAPIView
 
 '''TODO ДОБАВИТЬ ЛОКАЛЬНЫЕ УРЛЫ ДЛЯ API И ИНТЕГРИРОВАТЬ ЧЕРЕЗ include()'''
 

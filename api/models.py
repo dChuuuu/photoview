@@ -3,7 +3,7 @@ from django.http import Http404
 
 '''Модели для связи с БД'''
 
-class PostsManager(models.Manager):
+class PostsCommentsManager(models.Manager):
     '''Менеджер добавляет функционал по работе с постами
     get_object_or_404 - возвращает объект, либо статус 404'''
     def get_queryset(self):
@@ -34,7 +34,7 @@ class Posts(models.Model):
     date_time_created = models.DateField(auto_now_add=True)
     date_time_edited = models.DateField(auto_now_add=True)
 
-    objects = PostsManager()
+    objects = PostsCommentsManager()
 
 
 class Comments(models.Model):
@@ -46,3 +46,4 @@ class Comments(models.Model):
     comment_id = models.BigAutoField(primary_key=True, unique=True)
     content = models.CharField(max_length=256)
     post_id = models.ForeignKey('Posts', on_delete=models.CASCADE)
+    objects = PostsCommentsManager()
