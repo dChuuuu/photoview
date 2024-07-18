@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework.routers import SimpleRouter
 
-from api.views import PostsAPIView, PostAPIView, CommentsAPIView
+from api.views import PostsAPIView, PostAPIView, CommentsAPIView, CommentsDeleteAPIView
 
 '''TODO ДОБАВИТЬ ЛОКАЛЬНЫЕ УРЛЫ ДЛЯ API И ИНТЕГРИРОВАТЬ ЧЕРЕЗ include()'''
 
@@ -26,11 +26,13 @@ from api.views import PostsAPIView, PostAPIView, CommentsAPIView
 # router.register('posts', PostsViewSet)
 # router.register('comments', CommentsViewSet)
 urlpatterns = [
-    # path('admin/', admin.site.urls),
+    path('admin/', admin.site.urls),
     # path('api/v1/', include(router.urls))
     path('api/v1/posts/', PostsAPIView.as_view()),
-    path('api/v1/posts/<int:pk>', PostsAPIView.as_view()),
-    path('api/v1/posts/getpost/<int:pk>/', PostAPIView.as_view())
+    path('api/v1/posts/<int:pk>/', PostsAPIView.as_view()),
+    path('api/v1/posts/getpost/<int:pk>/', PostAPIView.as_view()),
+    path('api/v1/posts/getpost/<int:pk>/comments/', CommentsAPIView.as_view()),
+    path('api/v1/comments/delete/<int:pk>/', CommentsDeleteAPIView.as_view())
     # path('api/v1/posts/create', PostsViewSet.as_view({'post': 'create'})),
     # path('api/v1/posts/edit/<int:pk>', PostsViewSet.as_view({'put': 'update'})),
     # path('api/v1/posts/delete/<int:pk>', PostsViewSet.as_view({'delete': 'destroy'}))

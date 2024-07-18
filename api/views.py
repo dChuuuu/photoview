@@ -1,7 +1,7 @@
 from django.http import Http404
 from django.shortcuts import render
-from rest_framework import viewsets, status
-from rest_framework.pagination import LimitOffsetPagination, PageNumberPagination
+from rest_framework import status
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -48,34 +48,35 @@ class PostsAPIView(APIView):
 
 
 class PostAPIView(APIView):
+    '''Получение одного поста'''
     def get(self, request, pk):
-        try:
-            instance = Posts.objects.get_object_or_404(post_id=pk)
-        except:
-            raise Http404
+        instance = Posts.objects.get_object_or_404(pk)
         serializer = PostsSerializer(instance)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response({"post": serializer.data}, status=status.HTTP_200_OK)
 
 
 class CommentsAPIView(APIView):
+    '''get - получает список комментариев для конкретного поста (pk)
+    post - создаёт комментарий для конкретного поста (pk)'''
     def get(self, request, pk):
-        try:
-            instance = Comments.objects.get_object_or_404(post_id=pk)
-        except:
-            raise Http404
+        instance = Comments.objects.filter_object_or_404(pk=pk)
         paginator = PageNumberPagination()
         result_page = paginator.paginate_queryset(queryset=instance, request=request)
         serializer = CommentsSerializer(data=result_page, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        serializer.is_valid()
+        return Response({"comments": serializer.data}, status=status.HTTP_200_OK)
 
-    def post(self, request, pk):
+    def post(self, request, post_id):
         data = request.data
         serializer = CommentsSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
 
+
+class CommentsDeleteAPIView(APIView):
+    '''Удаляет комментарий по родному идентификатору comment_id'''
     def delete(self, request, pk):
-        instance = Comments.objects.get_object_or_404(comment_id=pk)
+        instance = Comments.objects.delete_comment_if_found(pk)
         instance.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)

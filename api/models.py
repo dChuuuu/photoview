@@ -1,20 +1,41 @@
+from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.http import Http404
 
 '''Модели для связи с БД'''
 
+
 class PostsCommentsManager(models.Manager):
-    '''Менеджер добавляет функционал по работе с постами
-    get_object_or_404 - возвращает объект, либо статус 404'''
+    '''Менеджер добавляет функционал по работе с экземплярами
+    get_object_or_404 - возвращает объект, либо статус 404
+    delete_comment_if_found - удаляет комментарий по родному идентификатору comment_id, либо статус 404
+    filter_object_or_404 - возвращает список объектов, либо статус 404'''
     def get_queryset(self):
         return super().get_queryset()
 
     def get_object_or_404(self, pk):
         try:
-            instance = Posts.objects.get(post_id=pk)
+            instance = self.get(post_id=pk)
+        except ObjectDoesNotExist:
+            raise Http404
+
+        return instance
+
+    def delete_comment_if_found(self, pk):
+        try:
+            instance = self.get(comment_id=pk)
+        except ObjectDoesNotExist:
+            raise Http404
+
+        return instance
+
+    def filter_object_or_404(self, pk):
+        try:
+            instance = self.filter(post_id=pk)
         except:
             raise Http404
         return instance
+
 
 class Posts(models.Model):
     '''Класс описывает модель постов:
