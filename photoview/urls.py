@@ -16,23 +16,40 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
+from rest_framework import permissions
 from rest_framework.routers import SimpleRouter
 
 from api.views import PostsAPIView, PostAPIView, CommentsAPIView, CommentsDeleteAPIView
 
 '''TODO ДОБАВИТЬ ЛОКАЛЬНЫЕ УРЛЫ ДЛЯ API И ИНТЕГРИРОВАТЬ ЧЕРЕЗ include()'''
 
+schema_view = get_schema_view(
+    openapi.Info(
+        title="API",
+        default_version='v1',
+        description="API documentation",
+        terms_of_service="<https://www.google.com/policies/terms/>",
+        contact=openapi.Contact(email="contact@api.local"),
+        license=openapi.License(name="BSD License"),
+    ),
+    public=True,
+    permission_classes=[permissions.AllowAny],
+)
+
 # router = SimpleRouter()
 # router.register('posts', PostsViewSet)
 # router.register('comments', CommentsViewSet)
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/v1/post/<int:pk>/', PostAPIView.as_view()),
     # path('api/v1/', include(router.urls))
     path('api/v1/posts/', PostsAPIView.as_view()),
-    path('api/v1/posts/<int:pk>/', PostsAPIView.as_view()),
-    path('api/v1/posts/getpost/<int:pk>/', PostAPIView.as_view()),
-    path('api/v1/posts/getpost/<int:pk>/comments/', CommentsAPIView.as_view()),
-    path('api/v1/comments/delete/<int:pk>/', CommentsDeleteAPIView.as_view())
+    path('api/v1/comments/<int:post_id>/', CommentsAPIView.as_view()),
+    path('api/v1/comments/delete/<int:pk>/', CommentsDeleteAPIView.as_view()),
+    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     # path('api/v1/posts/create', PostsViewSet.as_view({'post': 'create'})),
     # path('api/v1/posts/edit/<int:pk>', PostsViewSet.as_view({'put': 'update'})),
     # path('api/v1/posts/delete/<int:pk>', PostsViewSet.as_view({'delete': 'destroy'}))
