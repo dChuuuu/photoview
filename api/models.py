@@ -67,4 +67,5 @@ class Comments(models.Model):
     comment_id = models.BigAutoField(primary_key=True, unique=True)
     content = models.CharField(max_length=256)
     post_id = models.ForeignKey('Posts', on_delete=models.CASCADE)
+
     objects = PostsCommentsManager()
