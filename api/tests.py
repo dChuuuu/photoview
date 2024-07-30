@@ -1,50 +1,33 @@
 from django.conf import settings
 from django.db import IntegrityError
+from django.db.migrations import migration
 from django.test import TestCase
 from .models import Posts, Comments, PostsCommentsManager
 
 import pytest
 '''ЮНИТ-ТЕСТЫ ДЛЯ МОДЕЛЕЙ ПОСТОВ И КОММЕНТАРИЕВ'''
 
-def create_post():
+
+@pytest.fixture
+def post():
     '''Создаёт пост'''
     post = Posts.objects.create(title='TestTitle', content='TestContent', picture='TestPicture')
     return post
 
 
-def create_post_invalid():
-    '''Создаёт пост с некорректным id'''
-    post = Posts.objects.create(post_id='asdsad')
-    return post
-
-def get_post(post=None):
-    '''Получение поста из БД'''
-    post = Posts.objects.get(post_id=post.post_id)
-    return post
-
-
-def create_comment(post=None):
+@pytest.fixture
+def comment(post):
     '''Создание комментария со ссылкой на пост(объект)'''
     comment = Comments.objects.create(post_id=post, comment_id=111111, content='TestComment')
     return comment
 
 
-def create_comment_invalid(post=None):
-    '''Создание комментария с некорректным id'''
-    comment = Comments.objects.create(post_id=post, comment_id='111111', content='TestComment')
-
-
-def get_comment(comment=None):
-    '''Получение комментария из БД'''
-    comment = Comments.objects.get(comment_id=comment.comment_id)
-    return comment
-
 @pytest.mark.django_db
 class TestPostsModel:
     '''Тестирование функционала модели постов'''
-    def test_post_add(self):
+
+    def test_post_add(self, post):
         '''Создаёт пост с базовыми параметрами и проверяет их наличие, соответствие'''
-        post = create_post()
 
         assert post.title == 'TestTitle'
         assert post.content == 'TestContent'
@@ -53,45 +36,40 @@ class TestPostsModel:
     def test_post_add_invalid_data(self):
         '''Создаёт пост с некорректным id, проверяет на возникновение исключения'''
         try:
-            post = create_post_invalid()
+            Posts.objects.create(post_id='asasas')
             assert False
         except:
             assert True
 
-
-    def test_post_edit(self):
+    def test_post_edit(self, post):
         '''Редактирование поста, проверка на соответствие данных исходным и их наличие'''
-        post = create_post()
-        updated_post = get_post(post)
-        updated_post.title = 'TestEditedTitle'
-        updated_post.content = 'TestEditedContent'
-        updated_post.picture = 'TestEditedPicture'
 
-        assert updated_post.title == 'TestEditedTitle'
-        assert updated_post.content == 'TestEditedContent'
-        assert updated_post.picture == 'TestEditedPicture'
+        post.content = 'UpdatedPostContent'
+        post.save()
+        assert Posts.objects.get(post_id=post.post_id).content == 'UpdatedPostContent'
 
-    def test_post_nocomments_delete(self):
+    def test_post_nocomments_delete(self, post):
         '''Удаление поста, не содержащего комментарии, проверка'''
-        post = create_post()
-        post_delete = get_post(post)
-        post_delete.delete()
+
+        post_id = post.post_id
+        post.delete()
 
         try:
-            get_post(post)
+            Posts.objects.get(post_id=post_id)
             assert False
         except:
             assert True
 
-    def test_post_wcomments_delete(self):
+    def test_post_wcomments_delete(self, post, comment):
         '''Удаление поста с комментариями, проверка на связь моделей'''
-        post = create_post()
-        comment = create_comment(post)
-        post_delete = get_post(post)
-        post_delete.delete()
+
+        post_id = post.post_id
+        comment_id = comment.comment_id
+        post.delete()
 
         try:
-            get_comment(comment)
+            Comments.objects.get(comment_id=comment_id)
+            Posts.objects.get(post_id=post_id)
             assert False
         except:
             assert True
@@ -100,47 +78,45 @@ class TestPostsModel:
 @pytest.mark.django_db
 class TestCommentsModel:
     '''Тестирование функционала модели комментариев'''
-    def test_add_comment_wpostid(self):
+
+    def test_add_comment_wpostid(self, post, comment):
         '''Добавление комментария с имеющимся id поста'''
-        post = create_post()
-        comment = create_comment(post)
+
         assert comment.post_id == post
-        assert comment.content == 'TestComment'
+        assert Comments.objects.get(comment_id=comment.comment_id)
 
     def add_comment_invalid_data(self):
         '''Добавление комментария с некорректным id'''
+
         try:
-            comment = create_comment_invalid()
+            Comments.objects.create(comment_id='asas')
             assert False
         except:
             assert True
 
     def test_add_comment_nopostid(self):
         '''Добавление комментария без id поста, проверка на исключение'''
+
         try:
-            comment = create_comment()
+            Comments.objects.create(post_id=None)
             assert False
         except:
             assert True
 
-    def test_comment_edit(self):
+    def test_comment_edit(self, comment):
         '''Редактирование поста, проверка на соответствие данным'''
-        post = create_post()
-        comment = create_comment(post)
-        updated_comment = get_comment(comment)
-        updated_comment.content = 'UpdatedCommentContent'
 
-        assert updated_comment.content == 'UpdatedCommentContent'
+        comment.content = 'UpdatedCommentContent'
+        comment.save()
+        assert Comments.objects.get(comment_id=comment.comment_id).content == 'UpdatedCommentContent'
 
-    def test_comment_delete(self):
+    def test_comment_delete(self, comment):
         '''Удаление комментария, проверка'''
-        post = create_post()
-        comment = create_comment(post)
-        comment = get_comment(comment)
-        comment.delete()
 
+        comment_id = comment.comment_id
+        comment.delete()
         try:
-            get_comment(comment)
+            Comments.objects.get(comment_id=comment_id)
             assert False
         except:
             assert True
