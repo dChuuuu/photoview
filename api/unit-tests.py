@@ -120,4 +120,3 @@ class TestCommentsModel:
             assert False
         except:
             assert True
-

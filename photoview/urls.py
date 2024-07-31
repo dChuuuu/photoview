@@ -43,12 +43,12 @@ schema_view = get_schema_view(
 # router.register('posts', PostsViewSet)
 # router.register('comments', CommentsViewSet)
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('api/v1/post/<int:pk>/', PostAPIView.as_view()),
+    path('admin/', admin.site.urls, name='admin'),
+    path('api/v1/post/<int:pk>/', PostAPIView.as_view(), name='post'),
     # path('api/v1/', include(router.urls))
-    path('api/v1/posts/', PostsAPIView.as_view()),
-    path('api/v1/comments/<int:post_id>/', CommentsAPIView.as_view()),
-    path('api/v1/comments/delete/<int:pk>/', CommentsDeleteAPIView.as_view()),
+    path('api/v1/posts/', PostsAPIView.as_view(), name='posts'),
+    path('api/v1/comments/<int:post_id>/', CommentsAPIView.as_view(), name='comment'),
+    path('api/v1/comments/delete/<int:pk>/', CommentsDeleteAPIView.as_view(), name='comment-delete'),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     # path('api/v1/posts/create', PostsViewSet.as_view({'post': 'create'})),
     # path('api/v1/posts/edit/<int:pk>', PostsViewSet.as_view({'put': 'update'})),

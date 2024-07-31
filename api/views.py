@@ -50,9 +50,11 @@ class PostsAPIView(APIView):
         serializer = PostsSerializer(data=data)
         if serializer.is_valid() and 'title' in data:
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
+class PostAPIView(APIView):
     request_schema_dict = openapi.Schema(
         title=("Create post"),
         type=openapi.TYPE_OBJECT,
@@ -82,11 +84,6 @@ class PostsAPIView(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-
-
-class PostAPIView(APIView):
 
     def get(self, request, pk):
         '''Получение одного поста'''

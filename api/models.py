@@ -46,6 +46,8 @@ class Posts(models.Model):
     likes - Лайки на посте TODO РЕАЛИЗОВАТЬ ОБНОВЛЕНИЕ В РЕАЛЬНОМ ВРЕМЕНИ НА УРОВНЕ БЭКЕНДА
     date_time_created - Дата и время создания поста
     date_time_edited - Дата редактирования поста TODO РЕАЛИЗОВАТЬ ТАЙМЕР СУТКИ НА РЕДАКТИРОВАНИЕ ПОСТА'''
+    class Meta:
+        ordering = ['post_id']
 
     post_id = models.BigAutoField(primary_key=True, unique=True)
     title = models.CharField(max_length=256, null=True)
