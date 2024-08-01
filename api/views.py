@@ -100,7 +100,6 @@ class PostAPIView(APIView):
 
 class CommentsAPIView(APIView):
 
-
     def get(self, request, post_id):
         '''Получение списка комментариев для поста'''
         instance = Comments.objects.filter_object_or_404(pk=post_id)
@@ -115,9 +114,9 @@ class CommentsAPIView(APIView):
         type=openapi.TYPE_OBJECT,
         properties={
 
-            'post_id': openapi.Schema(type=openapi.TYPE_INTEGER,
-                                      description=('Идентификатор поста'),
-                                      example=16),
+            'post_id': openapi.Schema(type=openapi.TYPE_STRING,
+                                    description=('Идентификатор поста'),
+                                    example='16'),
 
             'content': openapi.Schema(type=openapi.TYPE_STRING,
                                       description=('Содержимое комментария'),
@@ -134,6 +133,7 @@ class CommentsAPIView(APIView):
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class CommentsDeleteAPIView(APIView):

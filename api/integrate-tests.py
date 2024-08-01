@@ -3,7 +3,6 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APIClient
 
-
 @pytest.fixture
 def client():
     client = APIClient()
@@ -16,10 +15,23 @@ def url_posts():
     return url
 
 
-# @pytest.fixture
-# def url_post(request):
-#     url = reverse('post', args=[request.param])
-#     return url
+@pytest.fixture
+def post(client, url_posts, request):
+    data_request = {'title': 'Testing title',
+                    'content': 'Testing content',
+                    'picture': 'Testing pictures'}
+    request = client.post(url_posts, data=data_request, format='json')
+    url = reverse('post', args=[request.data['post_id']])
+    return {'post_url': url, 'post_id': request.data['post_id'], 'data': request.data}
+
+@pytest.fixture
+def comment(client, post, request):
+    data_request = {'post_id': post['post_id'],
+                    'content': 'Comment content'}
+    url = reverse('comment', args=[post['post_id']])
+    request = client.post(url, data=data_request, format='json')
+    return {'comment_id': request.data['comment_id'], 'data': request.data, 'status': request.status_code}
+
 
 
 @pytest.mark.django_db
@@ -60,37 +72,27 @@ class TestPosts:
 
 @pytest.mark.django_db
 class TestPost:
-    def test_post_get(self, client, url_posts):
-        data_request = {'title': 'Testing title',
-                        'content': 'Testing content',
-                        'picture': 'Testing pictures'}
-        request = client.post(url_posts, data=data_request, format='json')
-        data_response = {'post_id': request.data['post_id']}
-        url_post = reverse('post', args=str(request.data['post_id']))
-        response = client.get(url_post, data=data_response, format='json')
 
+    def test_post_get(self, client, post, url_posts):
+        post_id = post['post_id']
+        response = client.get(post['post_url'], data={'post_id': post_id}, format='json')
+
+        assert response.data['post']['post_id'] == post_id
         assert response.status_code == status.HTTP_200_OK
-        assert request.data['post_id'] == response.data['post']['post_id']
+        assert post_id == response.data['post']['post_id']
 
-    def test_post_patch(self, client, url_posts):
-        data = {'title': 'Testing title',
-                'content': 'Testing content',
-                'picture': 'Testing pictures'}
-        response = client.post(url_posts, data=data, format='json')
-        url_post = reverse('post', args=str(response.data['post_id']))
-        data_response = {'post_id': response.data['post_id']}
-        response = client.get(url_post, data=data_response, format='json')
-        response.data['title'] = 'Edited title'
-        response = client.patch(url_post, data=response.data, format='json')
+    def test_post_patch(self, client, post, url_posts):
+        response = client.patch(post['post_url'], data={'title': 'Edited title'}, format='json')
 
         assert response.data['title'] == 'Edited title'
 
-    def test_post_delete(self, client, url_posts):
-        data = {'title': 'Testing title',
-                'content': 'Testing content',
-                'picture': 'Testing pictures'}
-        response = client.post(url_posts, data=data, format='json')
-        url_post = reverse('post', args=str(response.data['post_id']))
-        response = client.delete(url_post, data=response.data['post_id'], format='json')
+    def test_post_delete(self, client, post, url_posts):
+        post_id = post['post_id']
+        response = client.delete(post['post_url'], data={'post_id': post_id}, format='json')
 
         assert response.status_code == status.HTTP_204_NO_CONTENT
+
+@pytest.mark.django_db
+class TestComment:
+    def test_comments_create(self, comment):
+        assert comment['status'] == status.HTTP_200_OK
