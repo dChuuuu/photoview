@@ -66,6 +66,9 @@ class Comments(models.Model):
     content - Содержимое комментария;
     post_id - Внешний ключ на Posts
     TODO РЕАЛИЗОВАТЬ ОБНОВЛЕНИЕ В РЕАЛЬНОМ ВРЕМЕНИ НА УРОВНЕ БЭКЕНДА'''
+
+    class Meta:
+        ordering = ['comment_id']
     comment_id = models.BigAutoField(primary_key=True, unique=True)
     content = models.CharField(max_length=256)
     post_id = models.ForeignKey('Posts', on_delete=models.CASCADE)

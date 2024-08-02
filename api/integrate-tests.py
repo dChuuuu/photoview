@@ -30,8 +30,13 @@ def comment(client, post, request):
                     'content': 'Comment content'}
     url = reverse('comment', args=[post['post_id']])
     request = client.post(url, data=data_request, format='json')
-    return {'comment_id': request.data['comment_id'], 'data': request.data, 'status': request.status_code}
+    return {'comment_id': request.data['comment_id'], 'data': request.data, 'status': request.status_code, 'url': url}
 
+@pytest.fixture
+def comment_delete(client, request, comment):
+    data_request = {'comment_id': comment['comment_id']}
+    url = reverse('comment-delete', args=[comment['comment_id']])
+    return {'url': url}
 
 
 @pytest.mark.django_db
@@ -96,3 +101,13 @@ class TestPost:
 class TestComment:
     def test_comments_create(self, comment):
         assert comment['status'] == status.HTTP_200_OK
+
+    def test_comments_get(self, comment, client):
+        response = client.get(comment['url'], format='json')
+
+        assert response.status_code == status.HTTP_200_OK
+        assert response.data['comments'][0]['comment_id'] == comment['comment_id']
+
+    def test_comments_delete(self, comment_delete, client):
+        response = client.delete(comment_delete['url'], format='json')
+        assert response.status_code == status.HTTP_204_NO_CONTENT
