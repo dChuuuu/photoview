@@ -3,9 +3,19 @@ from django.db import IntegrityError
 from django.db.migrations import migration
 from django.test import TestCase
 from .models import Posts, Comments, PostsCommentsManager
+import factory
 
 import pytest
 '''ЮНИТ-ТЕСТЫ ДЛЯ МОДЕЛЕЙ ПОСТОВ И КОММЕНТАРИЕВ'''
+
+
+class PostsFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = Posts
+
+    title = factory.sequence(lambda n: f'Test title{n}')
+    content = 'Test content'
+
 
 
 @pytest.fixture
@@ -26,12 +36,14 @@ def comment(post):
 class TestPostsModel:
     '''Тестирование функционала модели постов'''
 
-    def test_post_add(self, post):
+    def test_post_add(self):
         '''Создаёт пост с базовыми параметрами и проверяет их наличие, соответствие'''
 
-        assert post.title == 'TestTitle'
-        assert post.content == 'TestContent'
-        assert post.picture == 'TestPicture'
+        PostsFactory.create()
+        PostsFactory.create()
+        result = Posts.objects.all()
+        assert len(result) == 2
+        assert result[0].title == 'Test title0'
 
     def test_post_add_invalid_data(self):
         '''Создаёт пост с некорректным id, проверяет на возникновение исключения'''
