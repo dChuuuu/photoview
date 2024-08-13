@@ -1,0 +1,29 @@
+name: Tests and linters
+
+on: 
+  push:
+      branches: [master]
+
+jobs:
+     test:
+       name: Run tests
+       runs-on: windows-latest
+       steps:
+            name: Checkout repository
+            uses: action/checkout@v4
+
+            name: Setup python
+            uses: actions/setup-python@v4
+
+            name: Install dependencies
+            run: pip install -r requirements.txt
+
+            name: Move to api dir
+            run: cd api
+
+            name: Run unit-tests
+            run: pytest unit-tests.py
+
+            name: Run integrate tests
+            run: pytest unit-tests.py
+     
