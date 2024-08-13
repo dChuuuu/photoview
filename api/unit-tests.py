@@ -1,11 +1,10 @@
-from django.conf import settings
-from django.db import IntegrityError
-from django.db.migrations import migration
-from django.test import TestCase
-from .models import Posts, Comments, PostsCommentsManager
 import factory
-
 import pytest
+from django.core.exceptions import ObjectDoesNotExist
+from django.db import IntegrityError
+
+from .models import Comments, Posts
+
 '''ЮНИТ-ТЕСТЫ ДЛЯ МОДЕЛЕЙ ПОСТОВ И КОММЕНТАРИЕВ'''
 
 
@@ -17,18 +16,19 @@ class PostsFactory(factory.django.DjangoModelFactory):
     content = 'Test content'
 
 
-
 @pytest.fixture
 def post():
     '''Создаёт пост'''
-    post = Posts.objects.create(title='TestTitle', content='TestContent', picture='TestPicture')
+    post = Posts.objects.create(
+        title='TestTitle', content='TestContent', picture='TestPicture')
     return post
 
 
 @pytest.fixture
 def comment(post):
     '''Создание комментария со ссылкой на пост(объект)'''
-    comment = Comments.objects.create(post_id=post, comment_id=111111, content='TestComment')
+    comment = Comments.objects.create(
+        post_id=post, comment_id=111111, content='TestComment')
     return comment
 
 
@@ -50,7 +50,7 @@ class TestPostsModel:
         try:
             Posts.objects.create(post_id='asasas')
             assert False
-        except:
+        except ValueError:
             assert True
 
     def test_post_edit(self, post):
@@ -58,7 +58,8 @@ class TestPostsModel:
 
         post.content = 'UpdatedPostContent'
         post.save()
-        assert Posts.objects.get(post_id=post.post_id).content == 'UpdatedPostContent'
+        assert Posts.objects.get(
+            post_id=post.post_id).content == 'UpdatedPostContent'
 
     def test_post_nocomments_delete(self, post):
         '''Удаление поста, не содержащего комментарии, проверка'''
@@ -69,7 +70,7 @@ class TestPostsModel:
         try:
             Posts.objects.get(post_id=post_id)
             assert False
-        except:
+        except ObjectDoesNotExist:
             assert True
 
     def test_post_wcomments_delete(self, post, comment):
@@ -83,7 +84,7 @@ class TestPostsModel:
             Comments.objects.get(comment_id=comment_id)
             Posts.objects.get(post_id=post_id)
             assert False
-        except:
+        except ObjectDoesNotExist:
             assert True
 
 
@@ -103,7 +104,7 @@ class TestCommentsModel:
         try:
             Comments.objects.create(comment_id='asas')
             assert False
-        except:
+        except ValueError:
             assert True
 
     def test_add_comment_nopostid(self):
@@ -112,7 +113,7 @@ class TestCommentsModel:
         try:
             Comments.objects.create(post_id=None)
             assert False
-        except:
+        except IntegrityError:
             assert True
 
     def test_comment_edit(self, comment):
@@ -120,7 +121,8 @@ class TestCommentsModel:
 
         comment.content = 'UpdatedCommentContent'
         comment.save()
-        assert Comments.objects.get(comment_id=comment.comment_id).content == 'UpdatedCommentContent'
+        assert Comments.objects.get(
+            comment_id=comment.comment_id).content == 'UpdatedCommentContent'
 
     def test_comment_delete(self, comment):
         '''Удаление комментария, проверка'''
@@ -130,5 +132,5 @@ class TestCommentsModel:
         try:
             Comments.objects.get(comment_id=comment_id)
             assert False
-        except:
+        except ObjectDoesNotExist:
             assert True

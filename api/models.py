@@ -32,7 +32,7 @@ class PostsCommentsManager(models.Manager):
     def filter_object_or_404(self, pk):
         try:
             instance = self.filter(post_id=pk)
-        except:
+        except ObjectDoesNotExist:
             raise Http404
         return instance
 
@@ -42,7 +42,8 @@ class Posts(models.Model):
     post_id - Идентификатор поста;
     title - Заголовок поста;
     content - Содержимое поста
-    picture - Изображение относящееся к посту. Кодировка Base64. По умолчанию None TODO ЗАПИЛИТЬ ДОБАВЛЕНИЕ НЕСКОЛЬКИХ IMG
+    picture - Изображение относящееся к посту. Кодировка Base64.
+              По умолчанию None TODO ЗАПИЛИТЬ ДОБАВЛЕНИЕ НЕСКОЛЬКИХ IMG
     likes - Лайки на посте TODO РЕАЛИЗОВАТЬ ОБНОВЛЕНИЕ В РЕАЛЬНОМ ВРЕМЕНИ НА УРОВНЕ БЭКЕНДА
     date_time_created - Дата и время создания поста
     date_time_edited - Дата редактирования поста TODO РЕАЛИЗОВАТЬ ТАЙМЕР СУТКИ НА РЕДАКТИРОВАНИЕ ПОСТА'''

@@ -5,21 +5,20 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .serializers import PostsSerializer, CommentsSerializer
-from .models import Posts, Comments
-
+from .models import Comments, Posts
+from .serializers import CommentsSerializer, PostsSerializer
 
 # Create your views here.
 
 
 class PostsAPIView(APIView):
 
-
     def get(self, request):
         '''Получает все посты, хранящиеся в БД'''
         paginator = PageNumberPagination()
         data = Posts.objects.all()
-        result_page = paginator.paginate_queryset(queryset=data, request=request)
+        result_page = paginator.paginate_queryset(
+            queryset=data, request=request)
         serializer = PostsSerializer(data=result_page, many=True)
         serializer.is_valid()
         return Response({"posts": serializer.data}, status=status.HTTP_200_OK)
@@ -38,13 +37,14 @@ class PostsAPIView(APIView):
                                       example="Post content"),
 
             'picture': openapi.Schema(type=openapi.TYPE_STRING,
-                                      description=('Изображение в Base64 формате'),
+                                      description=(
+                                          'Изображение в Base64 формате'),
                                       example="Some picture"),
         }
     )
+
     @swagger_auto_schema(request_body=request_schema_dict, responses={200: 'OK'})
     def post(self, request):
-
         '''Отправляет данные о посте при его создании'''
         data = request.data
         serializer = PostsSerializer(data=data)
@@ -69,7 +69,8 @@ class PostAPIView(APIView):
                                       example="Post content"),
 
             'picture': openapi.Schema(type=openapi.TYPE_STRING,
-                                      description=('Изображение в Base64 формате'),
+                                      description=(
+                                          'Изображение в Base64 формате'),
                                       example="Some picture"),
         }
     )
@@ -104,7 +105,8 @@ class CommentsAPIView(APIView):
         '''Получение списка комментариев для поста'''
         instance = Comments.objects.filter_object_or_404(pk=post_id)
         paginator = PageNumberPagination()
-        result_page = paginator.paginate_queryset(queryset=instance, request=request)
+        result_page = paginator.paginate_queryset(
+            queryset=instance, request=request)
         serializer = CommentsSerializer(data=result_page, many=True)
         serializer.is_valid()
         return Response({"comments": serializer.data}, status=status.HTTP_200_OK)
@@ -115,8 +117,8 @@ class CommentsAPIView(APIView):
         properties={
 
             'post_id': openapi.Schema(type=openapi.TYPE_STRING,
-                                    description=('Идентификатор поста'),
-                                    example='16'),
+                                      description=('Идентификатор поста'),
+                                      example='16'),
 
             'content': openapi.Schema(type=openapi.TYPE_STRING,
                                       description=('Содержимое комментария'),
@@ -138,6 +140,7 @@ class CommentsAPIView(APIView):
 
 class CommentsDeleteAPIView(APIView):
     '''Удаляет комментарий по родному идентификатору comment_id'''
+
     def delete(self, request, pk):
         instance = Comments.objects.delete_comment_if_found(pk)
         instance.delete()

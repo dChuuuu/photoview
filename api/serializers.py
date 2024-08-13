@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from .models import Posts, Comments
+
+from .models import Comments, Posts
 
 '''Сериализаторы для моделей. Позволяют де- и сериализовать данные в JSON формат'''
 
