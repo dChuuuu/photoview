@@ -5,25 +5,25 @@ on:
       branches: [master]
 
 jobs:
-     test:
-       name: Run tests
-       runs-on: windows-latest
-       steps:
-            - name: Repo checkout
-            - uses: action/checkout@v4
-
-            - name: Python setup
-            - uses: actions/setup-python@v4
-
-            - name: Install dependencies
-            - run: pip install -r requirements.txt
-
-            - name: Move to api directory
-            - run: cd api
-
-            - name: Run unit-tests
-            - run: pytest unit-tests.py
-
-            - name: Run integrate-tests
-            - run: pytest integrate-tests.py
+     build:
+           runs-on: windows-latest     
+       
+           steps:
+                - name: Repo checkout
+                - uses: action/checkout@v4
+      
+                - name: Python setup
+                - uses: actions/setup-python@v4
+      
+                - name: Install dependencies
+                - run: pip install -r requirements.txt
+      
+                - name: Move to api directory
+                - run: cd api
+      
+                - name: Run unit-tests
+                - run: pytest unit-tests.py
+      
+                - name: Run integrate-tests
+                - run: pytest integrate-tests.py
      
