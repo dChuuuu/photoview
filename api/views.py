@@ -8,7 +8,7 @@ from rest_framework.views import APIView
 from .models import Comments, Posts
 from .serializers import CommentsSerializer, PostsSerializer
 
-# Create your views here.
+# Create your views here.ssssss
 
 
 class PostsAPIView(APIView):
