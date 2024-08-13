@@ -9,14 +9,14 @@ jobs:
            runs-on: ubuntu-latest     
        
            steps:
-                - name: Repo checkout
-                  uses: action/checkout@v2
-                  with:
+                
+                 - uses: action/checkout@v2
+                   with:
                       fetch-depth: 0
                       
-                - name: Python setup
-                  uses: actions/setup-python@v2
-                  with:
-                      python-version: "3.11"
+                 - name: Python setup
+                   uses: actions/setup-python@v2
+                   with:
+                        python-version: "3.11"
                 
      
