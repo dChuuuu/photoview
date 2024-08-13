@@ -6,7 +6,7 @@ on:
 
 jobs:
      build:
-           runs-on: windows-latest     
+           runs-on: ubuntu-latest     
        
            steps:
                 - name: Repo checkout
@@ -16,14 +16,12 @@ jobs:
                   uses: actions/setup-python@v4
       
                 - name: Install dependencies
-                  run: pip install -r requirements.txt
-      
-                - name: Move to api directory
-                  run: cd api
+                  run: pip install -r requirements.txt   
+                
       
                 - name: Run unit-tests
-                  run: pytest unit-tests.py
+                  run: pytest api/unit-tests.py
       
                 - name: Run integrate-tests
-                  run: pytest integrate-tests.py
+                  run: pytest api/integrate-tests.py
      
