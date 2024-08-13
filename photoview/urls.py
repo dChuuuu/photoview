@@ -54,3 +54,4 @@ urlpatterns = [
     # path('api/v1/posts/edit/<int:pk>', PostsViewSet.as_view({'put': 'update'})),
     # path('api/v1/posts/delete/<int:pk>', PostsViewSet.as_view({'delete': 'destroy'}))
 ]
+#sometests
