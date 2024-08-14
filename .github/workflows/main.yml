@@ -37,7 +37,12 @@ jobs:
            - name: Install PostgreSQL client
              run: 
               apt-get update
-              apt-get install --yes postgresql-client   
+              apt-get install --yes postgresql-client
+
+           - name: Setup database
+             run: psql -h postgres -U postgres_user -c 'CREATE DATABASE "photoview_db";'
+             env:
+                PGPASSWORD: 8565
               
            - name: Repository checkout
              uses: actions/checkout@v4             
