@@ -22,10 +22,10 @@ jobs:
              run: pip install -r requirements.txt
              
            - name: Run unit-tests
-             run: pytest api/unit-tests
+             run: pytest photoview/api/unit-tests
 
            - name: Run integrate-tests
-             run: pytest api/integrate-test
+             run: pytest photoview/api/integrate-test
 
     
          
