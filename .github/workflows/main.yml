@@ -47,32 +47,19 @@ jobs:
            - name: Execute dependencies
              run: pip install -r requirements.txt
 
-           - name: Connect to PostgreSQL
-              # Runs a script that creates a PostgreSQL table, populates
-              # the table with data, and then retrieves the data.
+           - name: Connect to PostgreSQL              
              run: |
                   sudo service postgresql start
                   sudo -u postgres createuser --superuser runner
                   python manage.py makemigrations api
                   python manage.py migrate
-              # Environment variables used by the `client.js` script to create a new PostgreSQL table.
-             # env:
-             #    # The hostname used to communicate with the PostgreSQL service container
-             #    POSTGRES_HOST: postgres
-             #    # The default PostgreSQL port
-             #    POSTGRES_PORT: 5432
-
-           # - name: Run migrations
-           #   run: python manage.py makemigrations api
-
-           # - name: Migrate
-           #   run: python manage.py migrate
+             
              
            - name: Run unit-tests
              run: pytest api/unit-tests.py
 
            - name: Run integrate-tests
-             run: pytest api/integrate-test.py
+             run: pytest api/integrate-tests.py
 
     
          
