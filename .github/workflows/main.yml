@@ -20,6 +20,7 @@ jobs:
                     # required
                     POSTGRES_PASSWORD: 8565
                     # optional (defaults to `5432`)
+                    POSTGRES_HOST: localhost
                     POSTGRES_PORT: 5432
                     # optional (defaults to `postgres`)
                     POSTGRES_USER: postgres
@@ -41,7 +42,7 @@ jobs:
 
            - name: Setup database
              run: |
-                psql -h postgres -U postgres -c 'CREATE DATABASE photoview_db'                          
+                psql -h localhost -U postgres -c 'CREATE DATABASE photoview_db'                          
              env:
                 PGPASSWORD: 8565
               
