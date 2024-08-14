@@ -81,7 +81,7 @@ WSGI_APPLICATION = 'photoview.wsgi.application'
 
 DATABASES = {
      'default': {
-         'ENGINE': dotenv_values().get('ENGINE'),
+         'ENGINE': 'django.db.backends.postgresql',
          'NAME': dotenv_values().get('NAME'),
          'USER': dotenv_values().get('USER'),
          'PASSWORD': dotenv_values().get('PASSWORD'),
