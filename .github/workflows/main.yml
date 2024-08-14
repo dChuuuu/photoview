@@ -40,7 +40,7 @@ jobs:
               sudo apt-get install --yes postgresql-client
 
            - name: Setup database
-           - run: |
+             run: |
                 psql -h postgres -U postgres -c 'CREATE DATABASE photoview_db'                          
              env:
                 PGPASSWORD: 8565
