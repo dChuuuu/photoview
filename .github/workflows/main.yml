@@ -35,7 +35,7 @@ jobs:
           
            steps:
            - name: Install PostgreSQL client
-             run: 
+             run: |
               apt-get update
               apt-get install --yes postgresql-client
 
