@@ -87,6 +87,9 @@ DATABASES = {
          'PASSWORD': dotenv_values().get('PASSWORD'),
          'HOST': dotenv_values().get('HOST'),
          'PORT': dotenv_values().get('PORT')
+        'TEST': {
+                'NAME': 'mytestdatabase',
+                },
      }
  }
 
