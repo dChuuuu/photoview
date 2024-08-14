@@ -8,31 +8,31 @@ jobs:
      test:
            runs-on: ubuntu-latest     
 
-           services:
-                postgres:
-                  # Docker Hub image
-                  image: postgres:latest
-                  # service environment variables
-                  # `POSTGRES_HOST` is `postgres`
-                  env:
-                    # optional (defaults to `postgres`)
-                    POSTGRES_DB: photoview_db
-                    # required
-                    POSTGRES_PASSWORD: 8565
-                    # optional (defaults to `5432`)
-                    POSTGRES_HOST: 127.0.0.1
-                    POSTGRES_PORT: 5432
-                    # optional (defaults to `postgres`)
-                    POSTGRES_USER: postgres
-                  ports:
-                    # maps tcp port 5432 on service container to the host
-                    - 5432:5432
-                  # set health checks to wait until postgres has started
-                  options: >-
-                    --health-cmd pg_isready
-                    --health-interval 10s
-                    --health-timeout 5s
-                    --health-retries 5
+           # services:
+           #      postgres:
+           #        # Docker Hub image
+           #        image: postgres:latest
+           #        # service environment variables
+           #        # `POSTGRES_HOST` is `postgres`
+           #        env:
+           #          # optional (defaults to `postgres`)
+           #          POSTGRES_DB: photoview_db
+           #          # required
+           #          POSTGRES_PASSWORD: 8565
+           #          # optional (defaults to `5432`)
+           #          POSTGRES_HOST: 127.0.0.1
+           #          POSTGRES_PORT: 5432
+           #          # optional (defaults to `postgres`)
+           #          POSTGRES_USER: postgres
+           #        ports:
+           #          # maps tcp port 5432 on service container to the host
+           #          - 5432:5432
+           #        # set health checks to wait until postgres has started
+           #        options: >-
+           #          --health-cmd pg_isready
+           #          --health-interval 10s
+           #          --health-timeout 5s
+           #          --health-retries 5
           
            steps:           
               
@@ -54,11 +54,11 @@ jobs:
                   python manage.py makemigrations api
                   python manage.py migrate
               # Environment variables used by the `client.js` script to create a new PostgreSQL table.
-             env:
-                # The hostname used to communicate with the PostgreSQL service container
-                POSTGRES_HOST: postgres
-                # The default PostgreSQL port
-                POSTGRES_PORT: 5432
+             # env:
+             #    # The hostname used to communicate with the PostgreSQL service container
+             #    POSTGRES_HOST: postgres
+             #    # The default PostgreSQL port
+             #    POSTGRES_PORT: 5432
 
            # - name: Run migrations
            #   run: python manage.py makemigrations api
