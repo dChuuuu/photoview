@@ -61,7 +61,7 @@ jobs:
            - name: Run integrate-tests
              run: pytest api/integrate-tests.py
              env: 
-                 SECRET_KEY: your-genereated-secret_key
+                 SECRET_KEY: "&^!xh319x%m*ro7%c2wi*bnu4$_mfut(y)dk7-1u6uqsx-2e*x"
     
          
      
