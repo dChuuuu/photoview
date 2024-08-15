@@ -59,7 +59,9 @@ jobs:
              run: pytest api/unit-tests.py
 
            - name: Run integrate-tests
-             run: pytest api/integrate-tests.py
+             run: |
+                   echo "django_secret_key=topsecretvalue" >> $GITHUB_ENV
+                   pytest api/integrate-tests.py
              env: 
                  SECRET_KEY: "&^!xh319x%m*ro7%c2wi"
     
