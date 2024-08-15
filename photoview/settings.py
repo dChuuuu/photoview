@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 '''TODO ДЕФОЛТНЫЕ ЗНАЧЕНИЯ В env.example'''
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = dotenv_values().get('SECRET_KEY')
+SECRET_KEY = 'django-insecure-c3ujo!%$90t5giy=uwsixf8q5j#hsitg@b2j=u6#h%2zd5md*6'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
