@@ -58,12 +58,16 @@ jobs:
            - name: Run unit-tests
              run: pytest api/unit-tests.py
 
-                     
+           - name: 'Create env file'
+             run: |
+                touch .env
+                echo SECRET_KEY = 'django-secret-key' >> .env                
+                cat .env          
                 
                 
            - name: Run integrate-tests
              run:                    
-                  SECRET_KEY=django-secret-key pytest api/integrate-tests.py
+                  pytest api/integrate-tests.py
                    
            - name: Run linters checkout
              run: flake8 --config flake8.ini
