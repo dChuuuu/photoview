@@ -58,9 +58,7 @@ jobs:
            - name: Run unit-tests
              run: pytest api/unit-tests.py
 
-           - name: 'Create env file'
-             run: |                
-                export SECRET_KEY = 'django-secret-key'                
+                     
                 
                 
            - name: Run integrate-tests
