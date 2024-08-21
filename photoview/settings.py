@@ -82,7 +82,7 @@ WSGI_APPLICATION = 'photoview.wsgi.application'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 DATABASES = {'default': dj_database_url.config(default='postgresql://main_admin:ycHMLw2DS6tsojoxYpA2KFJk5H7zYBDO@dpg'
-                                                       '-cr2bc9qj1k6c73el67fg-a/photoview_db')}
+                                                       '-cr2bc9qj1k6c73el67fg-a:5432/photoview_db')}
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
