@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+
+import dj_database_url
 from dotenv import dotenv_values
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -79,20 +81,8 @@ WSGI_APPLICATION = 'photoview.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-DATABASES = {
-     'default': {
-         'ENGINE': 'django.db.backends.postgresql',
-         'NAME': dotenv_values().get('NAME'),
-         'USER': dotenv_values().get('USER'),
-         'PASSWORD': dotenv_values().get('PASSWORD'),
-         'HOST': dotenv_values().get('HOST'),
-         'PORT': dotenv_values().get('PORT'),
-         'TEST': {
-                'NAME': 'mytestdatabase',
-                },
-     }
- }
-
+DATABASES = {'default': dj_database_url.config(default='postgresql://main_admin:ycHMLw2DS6tsojoxYpA2KFJk5H7zYBDO@dpg'
+                                                       '-cr2bc9qj1k6c73el67fg-a/photoview_db')}
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
