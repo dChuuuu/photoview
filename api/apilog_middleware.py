@@ -1,9 +1,11 @@
 import logging
 
+
 logger = logging.getLogger(__name__)
-handler = logging.StreamHandler()
+
+# handler = logging.StreamHandler()
 # formatter = logging.Formatter(fmt="")
-logger.addHandler(handler)
+# logger.addHandler(handler)
 
 
 class LoggingMiddleware:
@@ -11,6 +13,7 @@ class LoggingMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
+        logging.basicConfig(level=logging.INFO)
         logger.info('Request: %s %s', request.method, request.path)
         response = self.get_response(request)
         return response
