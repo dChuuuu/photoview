@@ -4,6 +4,7 @@ from rest_framework import status
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from apilog_middleware import LoggingMiddleware
 
 from .models import Comments, Posts
 from .serializers import CommentsSerializer, PostsSerializer
@@ -15,6 +16,7 @@ class PostsAPIView(APIView):
 
     def get(self, request):
         '''Получает все посты, хранящиеся в БД'''
+        LoggingMiddleware(request)
         paginator = PageNumberPagination()
         data = Posts.objects.all()
         result_page = paginator.paginate_queryset(
