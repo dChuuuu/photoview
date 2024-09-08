@@ -118,10 +118,6 @@ class CommentsAPIView(APIView):
         type=openapi.TYPE_OBJECT,
         properties={
 
-            'post_id': openapi.Schema(type=openapi.TYPE_STRING,
-                                      description=('Идентификатор поста'),
-                                      example='16'),
-
             'content': openapi.Schema(type=openapi.TYPE_STRING,
                                       description=('Содержимое комментария'),
                                       example="Это мой комментарий!"),

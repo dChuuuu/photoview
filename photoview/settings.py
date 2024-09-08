@@ -55,7 +55,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'api.my_middleware.MyMiddleware'
+    'api.apilog_middleware.LoggingMiddleware'
 ]
 
 ROOT_URLCONF = 'photoview.urls'
@@ -82,8 +82,14 @@ WSGI_APPLICATION = 'photoview.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-DATABASES = {'default': dj_database_url.config(default='postgresql://main_admin:ycHMLw2DS6tsojoxYpA2KFJk5H7zYBDO@dpg'
-                                                       '-cr2bc9qj1k6c73el67fg-a:5432/photoview_db')}
+DATABASES = {'default': {
+
+                'ENGINE': 'django.db.backends.postgresql',
+                'NAME':  'photoview_db',
+                'USER': 'postgres',
+                'PASSWORD': '8565',
+                'HOST': '127.0.0.1',
+                'PORT': '5432'}}
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
